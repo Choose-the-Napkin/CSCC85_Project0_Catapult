@@ -1,1 +1,1 @@
-g++ btcomm_test.c btcomm.c -lbluetooth
+g++ $1 btcomm.c -lbluetooth
