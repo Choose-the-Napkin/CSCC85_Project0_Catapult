@@ -20,6 +20,9 @@
 // from the NXT to the EV3!
 
 #include "btcomm.h"
+#include <time.h>
+#include <ncurses.h>
+#define debug
 
 int main(int argc, char *argv[]) {
   char test_msg[8] = {0x06, 0x00, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x01};
@@ -60,8 +63,43 @@ int main(int argc, char *argv[]) {
   // max name length is 12 characters
   BT_setEV3name("R2D2");
 
-  BT_play_tone_sequence(tone_data);
+  //BT_play_tone_sequence(tone_data);
 
+  initscr();
+  cbreak();
+  //noecho();
+  nodelay(stdscr, TRUE);
+  //scrollok(stdscr, TRUE);
+
+  for (;;) {
+
+    int a = getch();
+    if (a == 'a') {
+      BT_timed_motor_port_start_v2(MOTOR_C, 70, 50);
+    } else if (a == 'd') {
+      BT_timed_motor_port_start_v2(MOTOR_C, -70, 50);
+    } else if (a == 's') {
+      BT_timed_motor_port_start_v2(MOTOR_A, 100, 50);
+      BT_motor_port_stop(MOTOR_A, 1); // Active braking
+    } else if (a == 'w') {
+      BT_timed_motor_port_start_v2(MOTOR_A, -100, 50);
+      //BT_motor_port_stop(MOTOR_A, 1); // Active braking
+    } else if (a == 'q') {
+      BT_timed_motor_port_start_v2(MOTOR_D, 60, 25);
+    } else if (a == 'e') {
+      BT_timed_motor_port_start_v2(MOTOR_D, -60, 25);
+    } else if (a == 'x') {
+      break;
+    }
+
+    refresh();
+  }
+
+  nocbreak();
+  //echo();
+
+
+  BT_all_stop(0); // Allow for free rotation of the motors
   BT_close();
   fprintf(stderr, "Done!\n");
 }
