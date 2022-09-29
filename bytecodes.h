@@ -1453,9 +1453,9 @@ typedef   enum
   GREEN         =  1,
   BLUE          =  2,
   BLANK         =  3,
-  COLORS
+  EV3COLORS
 }
-COLOR;
+EV3COLOR;
 
 
 /* Constants related to color sensor value using */
